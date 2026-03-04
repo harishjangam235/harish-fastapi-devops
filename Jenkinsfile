@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        sonarQubeScanner 'sonar-scanner'
+    }
+
     stages {
 
         stage('Checkout Code') {
@@ -11,21 +15,20 @@ pipeline {
 
         stage('SonarQube Scan') {
             steps {
-                sh '''
-                echo "Running SonarQube Scan"
-
-                sonar-scanner \
-                -Dsonar.projectKey=fastapi-devops \
-                -Dsonar.sources=. \
-                -Dsonar.host.url=http://localhost:9000 \
-                -Dsonar.login=sqp_0c5b73678bcf1c5820e92e1f55b527a2947de7d7
-                '''
+                withSonarQubeEnv('sonarqube') {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=fastapi-devops \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://localhost:9000
+                    '''
+                }
             }
         }
 
         stage('Build') {
             steps {
-                sh 'echo Building application'
+                sh 'echo Building FastAPI application'
             }
         }
 
