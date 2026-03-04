@@ -29,7 +29,7 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                sh 'sudo systemctl restart fastapi'
+                sh 'systemctl restart fastapi'
             }
         }
 
