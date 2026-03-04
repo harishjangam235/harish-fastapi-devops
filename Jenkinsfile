@@ -22,50 +22,49 @@ stages {
 
     stage('SonarQube Scan') {
         steps {
-            sh '''
-            echo "Running SonarQube Analysis..."
+            sh """
+            echo Running SonarQube Analysis
 
             sonar-scanner \
             -Dsonar.projectKey=fastapi-devops \
             -Dsonar.sources=. \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN
-            '''
+            """
         }
     }
 
     stage('Build') {
         steps {
-            sh '''
-            echo "Building FastAPI application"
+            sh """
+            echo Building FastAPI application
             tar -czf fastapi-app.tar.gz *.py
-            '''
+            """
         }
     }
 
     stage('Upload to Nexus') {
         steps {
-            sh '''
-            echo "Uploading artifact to Nexus..."
+            sh """
+            echo Uploading artifact to Nexus
 
             curl -v -u $NEXUS_USER:$NEXUS_PASS \
             --upload-file fastapi-app.tar.gz \
             $NEXUS_URL/repository/$NEXUS_REPO/fastapi-app.tar.gz
-            '''
+            """
         }
     }
 
     stage('Deploy Application') {
         steps {
-            sh '''
-            echo "Deploying FastAPI..."
+            sh """
+            echo Deploying FastAPI
 
             pkill -f uvicorn || true
             nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
-            '''
+            """
         }
     }
-
 }
 
 post {
