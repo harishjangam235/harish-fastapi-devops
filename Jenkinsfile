@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        sonarQubeScanner 'sonar-scanner'
-    }
-
     stages {
 
         stage('Checkout Code') {
@@ -17,6 +13,8 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh '''
+                    echo "Running SonarQube Scan"
+
                     sonar-scanner \
                     -Dsonar.projectKey=fastapi-devops \
                     -Dsonar.sources=. \
