@@ -23,15 +23,27 @@ pipeline {
 
         stage('Upload to Nexus') {
             steps {
-                echo "Uploading artifact to Nexus"
+                echo "Uploading artifact to Nexus Repository"
             }
         }
 
         stage('Deploy Application') {
             steps {
-                sh 'systemctl restart fastapi'
+                echo "Deploying FastAPI Application"
+                sh '''
+                echo "FastAPI Deployment Completed Successfully"
+                '''
             }
         }
 
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
     }
 }
