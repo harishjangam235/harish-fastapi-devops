@@ -3,9 +3,9 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
-                git 'https://github.com/harishjangam235/harish-fastapi-devops.git'
+                git branch: 'main', url: 'https://github.com/harishjangam235/harish-fastapi-devops.git'
             }
         }
 
@@ -29,10 +29,9 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                sh '''
-                sudo systemctl restart fastapi
-                '''
+                sh 'sudo systemctl restart fastapi'
             }
         }
+
     }
 }
