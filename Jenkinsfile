@@ -10,16 +10,20 @@ pipeline {
         }
 
         stage('SonarQube Scan') {
-    steps {
-        withSonarQubeEnv('sonarqube') {
-            sh '''
-            sonar-scanner \
-            -Dsonar.projectKey=fastapi-devops \
-            -Dsonar.sources=.
-            '''
+            steps {
+                script {
+                    def scannerHome = tool 'sonar-scanner'
+                    withSonarQubeEnv('sonarqube') {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=fastapi-devops \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://3.109.33.186:9000
+                        """
+                    }
+                }
+            }
         }
-    }
-}
 
         stage('Build') {
             steps {
