@@ -1,10 +1,6 @@
 pipeline {
 agent any
 
-tools {
-    sonarQubeScanner 'sonar-scanner'
-}
-
 stages {
 
     stage('Checkout Code') {
@@ -67,5 +63,6 @@ stages {
             '''
         }
     }
+
 }
 }
