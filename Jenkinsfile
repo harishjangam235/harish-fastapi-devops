@@ -56,13 +56,27 @@ stages {
         }
     }
 
-    stage('Deploy') {
+    stage('Blue-Green Deployment') {
         steps {
-            sh '''
-            echo "Deployment complete"
-            '''
+            sshagent(['ec2-key']) {
+                sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@3.109.33.186 "
+                cd /home/ubuntu
+                ./deploy-bluegreen.sh
+                "
+                '''
+            }
         }
     }
 
+}
+
+post {
+    success {
+        echo "Blue-Green Deployment Successful"
+    }
+    failure {
+        echo "Deployment Failed - Rollback maintained previous environment"
+    }
 }
 }
